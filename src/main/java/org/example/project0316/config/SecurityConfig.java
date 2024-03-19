@@ -38,6 +38,16 @@ public class SecurityConfig {
                 .csrf((auth) -> auth.disable()); // 사이트 위변조 방지 설정 csrf가 동작되면 post요청을 보낼 때 csrf 토큰도 보내주어야 로그인이 진행된다.
 
 
+        http
+                .sessionManagement((auth) -> auth
+                        .maximumSessions(1) // 하나의 id에서 로그인 할 수 있는 중복 로그인 허용 개수
+                        .maxSessionsPreventsLogin(true)); // 1을 초과했을 경우 기존에 로그인 되어있는 것을 로그아웃 시킬지 아니면 새로 로그인하는 것을 막을지
+
+        http
+                .sessionManagement((auth) -> auth
+                        .sessionFixation().changeSessionId());
+
+
         return http.build();
     }
 }
